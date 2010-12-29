@@ -25,13 +25,6 @@ class OTAProperty extends JobProperty<AbstractProject<?, ?>> {
     this.appName = appName
     this.projectPath = projectPath
   }
-
-  @Override
-  JobPropertyDescriptor getDescriptor() {
-    super.descriptor
-  }
-
-
 }
 
 @Extension

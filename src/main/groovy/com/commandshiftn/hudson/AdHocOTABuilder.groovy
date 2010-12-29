@@ -1,11 +1,14 @@
 package com.commandshiftn.hudson
 
-import hudson.tasks.Builder
-import org.kohsuke.stapler.DataBoundConstructor
-import hudson.model.AbstractBuild
+import hudson.Extension
 import hudson.Launcher
+import hudson.model.AbstractBuild
+import hudson.model.AbstractProject
 import hudson.model.BuildListener
 import hudson.model.Descriptor
+import hudson.tasks.BuildStepDescriptor
+import hudson.tasks.Builder
+import org.kohsuke.stapler.DataBoundConstructor
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,5 +45,23 @@ class AdHocOTABuilder extends Builder {
   @Override
   Descriptor<Builder> getDescriptor() {
     super.descriptor
+  }
+}
+
+@Extension
+final class AdHocOTABuilderDescriptor extends BuildStepDescriptor<Builder> {
+  AdHocOTABuilderDescriptor() {
+    super(AdHocOTABuilder.class)
+    load()
+  }
+
+  @Override
+  boolean isApplicable(Class<? extends AbstractProject> aClass) {
+    true
+  }
+
+  @Override
+  String getDisplayName() {
+    "Package application for Adhoc OTA distribution."
   }
 }
