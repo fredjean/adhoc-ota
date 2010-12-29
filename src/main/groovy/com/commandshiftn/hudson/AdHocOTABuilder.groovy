@@ -5,7 +5,7 @@ import hudson.Launcher
 import hudson.model.AbstractBuild
 import hudson.model.AbstractProject
 import hudson.model.BuildListener
-import hudson.model.Descriptor
+
 import hudson.tasks.BuildStepDescriptor
 import hudson.tasks.Builder
 import org.kohsuke.stapler.DataBoundConstructor
@@ -22,29 +22,28 @@ class AdHocOTABuilder extends Builder {
   def provisioningProfilePath
   def codeSigningIdentity = "iPhone Distribution"
   def sdk = "iphoneos"
-  def appName
 
-  @DataBoundConstructor
-  AdHocOTABuilder(String configuration, String appName, String provisioningProfilePath) {
+  @DataBoundConstructor AdHocOTABuilder(String configuration, String provisioningProfilePath) {
     this.configuration = configuration
-    this.appName = appName
     this.provisioningProfilePath = provisioningProfilePath
   }
 
   @Override
   boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
     envs = build.getEnvironment(listener)
-    projectRoot = build.project.workspace
-    projectBuildDir = "${projectRoot}/build/${configuration}-${sdk}"
+    otaProperty = build.project.properties[OTAProperty.class]
+    projectRootDir = build.project.workspace
+    projectBuildDir = "${projectRootDir}/build/${configuration}-${sdk}"
+    xcRunPath = otaProperty?.descriptor?.xcRunPath
+    appName = otaProperty?.appName
 
-    launcher.launch().envs(envs).stdout(listener).pwd(projectRoot).cmds(descriptor.xcRunPath, "-sdk", sdk, "PackageApplication", "-v",
-            "${projectBuildDir}/${appName}.app", "-o", "${projectBuildDir}/${appName}-${build.number}.ipa",
+    listener.logger.println("Packaging ${appName} for AdHoc OTA Deployment.")
+
+    rc = launcher.launch().envs(envs).stdout(listener).pwd(projectRootDir).cmds(xcRunPath, "-sdk", sdk, "PackageApplication", "-v",
+            "${projectBuildDir}/${appName}.app", "-o",
+            "${projectBuildDir}/${appName}-${build.number}.ipa",
             "--sign", codeSigningIdentity, "--embed", provisioningProfilePath).join()
-  }
-
-  @Override
-  Descriptor<Builder> getDescriptor() {
-    super.descriptor
+    return rc == 0
   }
 }
 

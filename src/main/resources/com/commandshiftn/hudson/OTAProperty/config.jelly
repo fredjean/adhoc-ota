@@ -1,0 +1,15 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:section title="Xcode Project Properties">
+        <f:entry title="Application Name"
+                 description="Name of the application. This should match the name used within Xcode. This will be used for the name of the IPA bundle."
+                 field="appName">
+            <f:textbox/>
+        </f:entry>
+        <f:entry title="Xcode Project Directory"
+                 description="Location of the Xcode project within the workspace. Leave blank if the project is at the root of the checkout."
+                 field="projectDirectory">
+            <f:textbox/>
+        </f:entry>
+    </f:section>
+</j:jelly>

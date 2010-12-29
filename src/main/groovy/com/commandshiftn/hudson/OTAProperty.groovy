@@ -18,12 +18,12 @@ import hudson.Extension
  */
 class OTAProperty extends JobProperty<AbstractProject<?, ?>> {
   def appName
-  def projectPath
+  def projectDirectory
 
   @DataBoundConstructor
-  OTAProperty(String appName, String projectPath) {
+  OTAProperty(String appName, String projectDirectory) {
     this.appName = appName
-    this.projectPath = projectPath
+    this.projectDirectory = projectDirectory
   }
 }
 
