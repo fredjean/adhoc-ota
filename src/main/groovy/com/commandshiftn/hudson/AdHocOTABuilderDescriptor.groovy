@@ -9,16 +9,12 @@
 package com.commandshiftn.hudson
 
 import hudson.Extension
+import hudson.model.AbstractProject
 import hudson.tasks.BuildStepDescriptor
 import hudson.tasks.Builder
-import hudson.model.AbstractProject
-import org.kohsuke.stapler.StaplerRequest
-import net.sf.json.JSONObject
 
 @Extension
 final class AdHocOTABuilderDescriptor extends BuildStepDescriptor<Builder> {
-  def xcRunPath = "/usr/bin/xcrun"
-
   AdHocOTABuilderDescriptor() {
     super(AdHocOTABuilder.class)
     load()
@@ -33,13 +29,4 @@ final class AdHocOTABuilderDescriptor extends BuildStepDescriptor<Builder> {
   String getDisplayName() {
     "Package application for Adhoc OTA distribution."
   }
-
-  @Override
-  boolean configure(StaplerRequest req, JSONObject json) {
-    xcRunPath = json.getString("xcRunPath")
-    save()
-    true
-  }
-
-
 }

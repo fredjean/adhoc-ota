@@ -4,7 +4,8 @@
   Since we don't really have anything dynamic here, let's just use static HTML. 
 -->
 <div>
-    This plugin implements multiple Hudson build steps that can take place within
+    <p>This plugin implements multiple Hudson build steps that can take place within
     an Xcode based iOS project. The end result is an IPA file that can be used in an OTA AdHoc
-    Deployment. This is useful for ongoing iOS development and for beta testers.
+    Deployment. This is useful for ongoing iOS development and for beta testers.</p>
+    <p>This plugin requires Mac OS X with the iOS Development SDK installed.</p>
 </div>

@@ -19,12 +19,11 @@ class AdHocOTABuilder extends Builder {
   def provisioningProfilePath
   def codeSigningIdentity = "iPhone Distribution"
   def sdk = "iphoneos"
-  def appName = "TBD"
+  def appName
 
   @DataBoundConstructor
-  AdHocOTABuilder(String configuration, String sdk, String appName, String provisioningProfilePath) {
+  AdHocOTABuilder(String configuration, String appName, String provisioningProfilePath) {
     this.configuration = configuration
-    this.sdk = sdk
     this.appName = appName
     this.provisioningProfilePath = provisioningProfilePath
   }
@@ -36,12 +35,12 @@ class AdHocOTABuilder extends Builder {
     projectBuildDir = "${projectRoot}/build/${configuration}-${sdk}"
 
     launcher.launch().envs(envs).stdout(listener).pwd(projectRoot).cmds(descriptor.xcRunPath, "-sdk", sdk, "PackageApplication", "-v",
-            "${projectBuildDir}/${appName}.app", "-o", "${projectBuildDir}/${appName}.ipa",
+            "${projectBuildDir}/${appName}.app", "-o", "${projectBuildDir}/${appName}-${build.number}.ipa",
             "--sign", codeSigningIdentity, "--embed", provisioningProfilePath).join()
   }
 
   @Override
   Descriptor<Builder> getDescriptor() {
-    return super.descriptor
+    super.descriptor
   }
 }
