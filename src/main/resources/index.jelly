@@ -1,0 +1,10 @@
+<!--
+  This view is used to render the plugin list page.
+
+  Since we don't really have anything dynamic here, let's just use static HTML. 
+-->
+<div>
+    This plugin implements multiple Hudson build steps that can take place within
+    an Xcode based iOS project. The end result is an IPA file that can be used in an OTA AdHoc
+    Deployment. This is useful for ongoing iOS development and for beta testers.
+</div>
