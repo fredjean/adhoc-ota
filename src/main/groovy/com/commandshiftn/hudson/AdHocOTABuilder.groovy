@@ -32,18 +32,20 @@ class AdHocOTABuilder extends Builder {
   boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
     envs = build.getEnvironment(listener)
     otaProperty = build.project.properties[OTAProperty.class]
-    projectRootDir = build.project.workspace
+    projectRootDir = "${build.workspace}/${otaProperty.projectDirectory}"
     projectBuildDir = "${projectRootDir}/build/${configuration}-${sdk}"
     xcRunPath = otaProperty?.descriptor?.xcRunPath
     appName = otaProperty?.appName
 
     listener.logger.println("Packaging ${appName} for AdHoc OTA Deployment.")
 
-    rc = launcher.launch().envs(envs).stdout(listener).pwd(projectRootDir).cmds(xcRunPath, "-sdk", sdk, "PackageApplication", "-v",
+    cmds = [xcRunPath, "-sdk", sdk, "PackageApplication", "-v",
             "${projectBuildDir}/${appName}.app", "-o",
             "${projectBuildDir}/${appName}-${build.number}.ipa",
-            "--sign", codeSigningIdentity, "--embed", provisioningProfilePath).join()
-    return rc == 0
+            "--sign", codeSigningIdentity, "--embed", provisioningProfilePath]
+
+    rc = launcher.launch().envs(envs).stdout(listener).pwd(projectRootDir).cmds(cmds).join()
+    rc == 0
   }
 }
 
